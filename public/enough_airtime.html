@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" x-data="enoughAirtime()">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enough Airtime Widget</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div>
+        <input x-model="usage" placeholder="Enter usage items (e.g.call,sms)">
+        <input x-model="available" type="number" placeholder="Available Airtime">
+        <button @click="checkAirtime">Check Airtime</button>
+        <p>Remaining Airtime: <span x-text="result"></span></p>
+    </div>
+    <script>
+        function enoughAirtime() {
+            return {
+                usage: '',
+                available: 0,
+                result: 0,
+                async checkAirtime() {
+                    const response = await fetch('/api/enough', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ usage: this.usage, available: parseFloat(this.available) })
+                    });
+                    const data = await response.json();
+                    this.result = data.result;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widgets</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Words Widget -->
+    <div class="widget" x-data="wordGame()">
+        <h2>Words Widget</h2>
+        <input x-model="sentence" @input="fetchStats" placeholder="Enter a sentence">
+        <p>Sentence: <span x-text="sentence"></span></p>
+        <p>Longest Word Length: <span x-text="stats.longestWord"></span></p>
+        <p>Shortest Word: <span x-text="stats.shortestWord"></span></p>
+        <p>Sum of Word Lengths: <span x-text="stats.sum"></span></p>
+    </div>
+
+    <!-- Phone Bill Widget -->
+    <div class="widget" x-data="phoneBill()">
+        <h2>Phone Bill Widget</h2>
+        <input x-model="bill" placeholder="Enter bill items (e.g.call,sms)">
+        <button @click="calculateTotal">Calculate Total</button>
+        <p>Total Bill: <span x-text="totalBill"></span></p>
+
+        <h3>Set Prices</h3>
+        <input x-model="newPrice" type="number" step="0.01" placeholder="New Price">
+        <select x-model="priceType">
+            <option value="call">Call</option>
+            <option value="sms">SMS</option>
+        </select>
+        <button @click="setPrice">Set Price</button>
+        <p x-text="message"></p>
+    </div>
+
+    <!-- Enough Airtime Widget -->
+    <div class="widget" x-data="enoughAirtime()">
+        <h2>Enough Airtime Widget</h2>
+        <input x-model="usage" placeholder="Enter usage items (e.g.call,sms)">
+        <input x-model="available" type="number" placeholder="Available Airtime">
+        <button @click="checkAirtime">Check Airtime</button>
+        <p>Remaining Airtime: <span x-text="result"></span></p>
+    </div>
+
+    <script>
+        function wordGame() {
+            return {
+                sentence: '',
+                stats: {
+                    longestWord: 0,
+                    shortestWord: '',
+                    sum: 0
+                },
+                async fetchStats() {
+                    if (this.sentence.trim() === '') {
+                        this.stats = { longestWord: 0, shortestWord: '', sum: 0 };
+                        return;
+                    }
+                    const response = await fetch(`/api/word_game?sentence=${encodeURIComponent(this.sentence)}`);
+                    this.stats = await response.json();
+                }
+            }
+        }
+
+        function phoneBill() {
+            return {
+                bill: '',
+                totalBill: 0,
+                newPrice: 0,
+                priceType: 'call',
+                message: '',
+                async calculateTotal() {
+                    const response = await fetch('/api/phonebill/total', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ bill: this.bill })
+                    });
+                    const data = await response.json();
+                    this.totalBill = data.total;
+                },
+                async setPrice() {
+                    const response = await fetch('/api/phonebill/price', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ type: this.priceType, price: parseFloat(this.newPrice) })
+                    });
+                    const data = await response.json();
+                    this.message = data.message;
+                }
+            }
+        }
+
+        function enoughAirtime() {
+            return {
+                usage: '',
+                available: 0,
+                result: 0,
+                async checkAirtime() {
+                    const response = await fetch('/api/enough', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ usage: this.usage, available: parseFloat(this.available) })
+                    });
+                    const data = await response.json();
+                    this.result = data.result;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

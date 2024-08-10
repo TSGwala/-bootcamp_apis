@@ -1,0 +1,103 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #85a3d1;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.widget {
+    width: 100%;
+    max-width: 1200px; /* Set a max-width for larger screens */
+    padding: 20px;
+    background: #ead8e9;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.widget:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+}
+
+/* Header Styles */
+h2 {
+    color: #7a4a45; /* Bright Red */
+    margin-top: 0;
+    border-bottom: 2px solid #e74c3c;
+    padding-bottom: 10px;
+    font-size: 1.5em;
+}
+
+/* Form Styles */
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid #3498db; /* Bright Blue */
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    border-color: #2ecc71; /* Green */
+    outline: none;
+}
+
+button {
+    background-color: #3498db; /* Bright Blue */
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.2em;
+    margin: 10px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9; /* Darker Blue */
+    transform: scale(1.05);
+}
+
+/* Results Section */
+.results {
+    margin-top: 20px;
+    padding: 20px;
+    background: #eafaf1; /* Light Green */
+    border-left: 5px solid #3498db; /* Bright Blue */
+    border-radius: 6px;
+    text-align: left;
+}
+
+.results p {
+    margin: 0;
+    padding: 10px 0;
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .widget {
+        width: 100%;
+    }
+}
